@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Appointment</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+<header class="nav"><div class="nav-inner">
+  <a class="brand" href="/index.html"><span class="brand-dot"></span> Dentistry Hub</a>
+  <nav>
+    <a href="/login.html" data-auth="logged-out">Login</a>
+    <a href="/register.html" data-auth="logged-out">Sign up</a>
+    <a href="/myprofile.html" data-auth="logged-in">My Profile</a>
+    <a href="/doctor.html" data-role="doctor">Doctor</a>
+    <a href="/admin.html" data-role="admin">Admin</a>
+    <a href="javascript:void(0)" onclick="logout()" data-auth="logged-in">Logout</a>
+  </nav>
+</div></header>
+
+<main class="container">
+  <div class="card">
+    <h3>Book your appointment</h3>
+
+    <form id="appointmentForm" class="grid" style="grid-template-columns: 1fr 1fr 1fr; gap:14px; margin-top:12px">
+      <div>
+        <label>Choose a doctor</label>
+        <select class="input" id="doctor" required>
+          <option value="">Loading doctors…</option>
+        </select>
+      </div>
+      <div>
+        <label>Date & time</label>
+        <input class="input" type="datetime-local" id="when" required />
+      </div>
+      <div>
+        <label>Reason (optional)</label>
+        <input class="input" id="reason" placeholder="Checkup, cleaning, pain..." />
+      </div>
+
+      <div style="grid-column: 1 / -1; display:flex; gap:10px">
+        <button class="btn" type="submit">Book</button>
+        <a class="btn secondary" href="/myprofile.html">Back to My Profile</a>
+      </div>
+    </form>
+
+    <p id="noDoctors" class="muted" style="display:none; margin-top:8px">
+      No doctors found yet. Ask an admin to create a doctor account, or register one.
+    </p>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3>My appointments</h3>
+    <table class="table" id="list">
+      <thead><tr><th>Date</th><th>Time</th><th>Doctor</th><th>Reason</th><th></th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</main>
+
+<footer class="footer">© <span id="year"></span> Dentistry Hub</footer>
+<script>document.getElementById('year').textContent=new Date().getFullYear()</script>
+
+<script src="/script/auth-ui.js"></script>
+<script src="/script/appointment.js"></script>
+</body>
+</html>

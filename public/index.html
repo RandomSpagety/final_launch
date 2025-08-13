@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dentistry Hub</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/index.html"><span class="brand-dot"></span> Dentistry Hub</a>
+      <nav>
+        <a href="/login.html" data-auth="logged-out">Login</a>
+        <a href="/register.html" data-auth="logged-out">Sign up</a>
+        <a href="/myprofile.html" data-auth="logged-in">My Profile</a>
+        <a href="/doctor.html" data-role="doctor">Doctor</a>
+        <a href="/admin.html" data-role="admin">Admin</a>
+        <a href="javascript:void(0)" onclick="logout()" data-auth="logged-in">Logout</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="margin-top:20px">
+    <!-- Hero + About -->
+    <section class="hero card" style="padding:0">
+      <img src="/assests/home.jpg" alt="Clinic">
+      <div class="hero-title">Smiles made simple.</div>
+    </section>
+    <p class="about">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vehicula, neque id porttitor
+      pulvinar, risus nisl tristique massa, vel vulputate sapien sapien eu dui. (About us placeholder)
+    </p>
+
+    <!-- Auth entry: login + register (Home is the auth hub) -->
+    <div class="auth-grid">
+      <section class="card" data-auth="logged-out">
+        <h3>Welcome back</h3>
+        <p class="muted">Already have an account? Sign in to continue.</p>
+        <div style="margin-top:12px">
+          <a class="btn" href="/login.html">Login</a>
+        </div>
+      </section>
+      <section class="card" data-auth="logged-out">
+        <h3>New here?</h3>
+        <p class="muted">Create an account to manage appointments and profiles.</p>
+        <div style="margin-top:12px">
+          <a class="btn secondary" href="/register.html">Sign up</a>
+        </div>
+      </section>
+
+      <!-- After login, Home becomes a simple intro -->
+      <section class="card" data-auth="logged-in">
+        <h3>All set</h3>
+        <p class="muted">You’re signed in. Go to your profile to manage everything.</p>
+        <div style="margin-top:12px">
+          <a class="btn" href="/myprofile.html">Open My Profile</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">© <span id="year"></span> Dentistry Hub</footer>
+  <script>document.getElementById('year').textContent=new Date().getFullYear()</script>
+  <script src="/script/auth-ui.js"></script>
+</body>
+</html>

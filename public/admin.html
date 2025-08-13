@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+<header class="nav"><div class="nav-inner">
+  <a class="brand" href="/index.html"><span class="brand-dot"></span> Admin Panel</a>
+  <nav><a href="/index.html">Home</a></nav>
+</div></header>
+
+<main class="container">
+  <div class="card">
+    <h3>Users</h3>
+    <table class="table" id="usersTable">
+      <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Specialty</th><th>Actions</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</main>
+
+<script>
+  const token = localStorage.getItem('demoToken');
+  if(!token || localStorage.getItem('role')!=='admin'){
+    alert('Admin only.'); location.href='/login.html';
+  }
+
+  async function loadUsers(){
+    const res = await fetch('/api/admin/users',{ headers:{Authorization:`Bearer ${token}`}});
+    const users = await res.json();
+    const tbody = document.querySelector('#usersTable tbody');
+    tbody.innerHTML = '';
+    users.forEach(u=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><input class="input" value="${u.name||''}" data-k="name"></td>
+        <td><input class="input" value="${u.email||''}" data-k="email"></td>
+        <td>
+          <select class="input" data-k="role">
+            <option ${u.role==='patient'?'selected':''}>patient</option>
+            <option ${u.role==='doctor'?'selected':''}>doctor</option>
+            <option ${u.role==='admin'?'selected':''}>admin</option>
+          </select>
+        </td>
+        <td><input class="input" value="${u.specialty||''}" data-k="specialty"></td>
+        <td style="display:flex; gap:8px">
+          <button class="btn" onclick="save('${u._id}', this)">Save</button>
+          <button class="btn danger" onclick="delUser('${u._id}')">Delete</button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  async function save(id, btn){
+    const tr = btn.closest('tr');
+    const obj = {};
+    tr.querySelectorAll('input,select').forEach(el=> obj[el.dataset.k]=el.value);
+    const res = await fetch('/api/admin/users/'+id,{
+      method:'PUT',
+      headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`},
+      body:JSON.stringify(obj)
+    });
+    if(res.ok) alert('Saved');
+    else alert('Save failed');
+  }
+
+  async function delUser(id){
+    if(!confirm('Delete this user?')) return;
+    const res = await fetch('/api/admin/users/'+id,{
+      method:'DELETE', headers:{Authorization:`Bearer ${token}`}
+    });
+    if(res.ok) loadUsers(); else alert('Delete failed');
+  }
+
+  loadUsers();
+</script>
+<script src="/script/auth-ui.js"></script>
+
+</body>
+</html>

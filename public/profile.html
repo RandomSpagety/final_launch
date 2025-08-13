@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>My Profile</title>
+  <link rel="stylesheet" href="/style.css"/>
+</head>
+<body>
+<header class="nav"><div class="nav-inner">
+  <a class="brand" href="/index.html"><span class="brand-dot"></span> Dentistry Hub</a>
+  <nav>
+    <a href="/login.html" data-auth="logged-out">Login</a>
+    <a href="/register.html" data-auth="logged-out">Sign up</a>
+    <a href="/myprofile.html" data-auth="logged-in">My Profile</a>
+    <a href="/doctor.html" data-role="doctor">Doctor</a>
+    <a href="/admin.html" data-role="admin">Admin</a>
+    <a href="javascript:void(0)" onclick="logout()" data-auth="logged-in">Logout</a>
+  </nav>
+</div></header>
+
+<main class="container">
+  <!-- Profile summary -->
+  <div class="card">
+    <h3>Account</h3>
+    <div class="grid" style="grid-template-columns: 1fr 1fr; gap:14px">
+      <div>
+        <label>Name</label>
+        <input class="input" id="name" />
+      </div>
+      <div>
+        <label>Email</label>
+        <input class="input" id="email" type="email" />
+      </div>
+      <div>
+        <label>Role</label>
+        <input class="input" id="role" disabled />
+      </div>
+      <div>
+        <label>Password</label>
+        <input class="input" value="••••••••" disabled />
+      </div>
+    </div>
+    <div style="margin-top:14px; display:flex; gap:10px">
+      <button class="btn" id="saveProfileBtn">Save profile</button>
+      <a class="btn secondary" href="/appointment.html">Make Appointment</a>
+    </div>
+  </div>
+
+  <!-- Change password -->
+  <div class="card" style="margin-top:16px">
+    <h3>Change password</h3>
+    <form id="pwdForm" style="margin-top:12px">
+      <div class="grid" style="grid-template-columns: 1fr 1fr 1fr; gap:14px">
+        <div>
+          <label>Current password</label>
+          <input class="input" name="currentPassword" type="password" required />
+        </div>
+        <div>
+          <label>New password</label>
+          <input class="input" name="newPassword" type="password" minlength="6" required />
+        </div>
+        <div>
+          <label>Confirm new password</label>
+          <input class="input" name="confirm" type="password" minlength="6" required />
+        </div>
+      </div>
+      <div style="margin-top:14px">
+        <button class="btn" type="submit">Update password</button>
+      </div>
+    </form>
+  </div>
+</main>
+
+<footer class="footer">© <span id="year"></span> Dentistry Hub</footer>
+<script>document.getElementById('year').textContent=new Date().getFullYear()</script>
+
+<script src="/script/auth-ui.js"></script>
+<script>
+  // Require login for profile page
+  if(!requireRole()){}
+
+  const token = localStorage.getItem('demoToken');
+
+  // load profile
+  (async ()=>{
+    const res = await fetch('/api/me', { headers:{ Authorization: `Bearer ${token}` }});
+    if(!res.ok){ alert('Failed to load profile'); return; }
+    const me = await res.json();
+    document.getElementById('name').value = me.name || '';
+    document.getElementById('email').value = me.email || '';
+    document.getElementById('role').value  = (me.role||'').toUpperCase();
+  })();
+
+  // save name/email
+  document.getElementById('saveProfileBtn').addEventListener('click', async ()=>{
+    const body = {
+      name: document.getElementById('name').value.trim(),
+      email: document.getElementById('email').value.trim()
+    };
+    const res = await fetch('/api/me', {
+      method:'PUT',
+      headers:{ 'Content-Type':'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify(body)
+    });
+    if(res.ok) alert('Profile saved');
+    else {
+      const d = await res.json().catch(()=>({}));
+      alert(d.message || 'Save failed');
+    }
+  });
+
+  // change password
+  document.getElementById('pwdForm').addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const f = new FormData(e.target);
+    const curr = f.get('currentPassword');
+    const npw  = f.get('newPassword');
+    const conf = f.get('confirm');
+    if(npw !== conf){ alert('New passwords do not match'); return; }
+
+    const res = await fetch('/api/me/password', {
+      method:'PUT',
+      headers:{ 'Content-Type':'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ currentPassword: curr, newPassword: npw })
+    });
+    const data = await res.json();
+    if(res.ok){ alert('Password updated'); e.target.reset(); }
+    else { alert(data.message || 'Update failed'); }
+  });
+</script>
+
+<script src="/script/auth-ui.js"></script>
+<script>
+  if(!requireRole()){} // require login (any role)
+  (async ()=>{
+    const token = localStorage.getItem('demoToken');
+    const res = await fetch('/api/me', { headers:{Authorization:`Bearer ${token}`}});
+    const me = await res.json();
+    document.getElementById('name').textContent = me.name || 'My Account';
+    document.getElementById('email').textContent = me.email || '';
+    document.getElementById('role').textContent  = (me.role||'').toUpperCase();
+  })();
+</script>
+</body>
+</html>
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Profile</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  // navbar injected by nav.js if you included it 
+  <h2>My Profile</h2>
+
+  <section>
+    <h3>Account</h3>
+    <div><strong>Name/Account:</strong> <span id="acctName">—</span></div>
+    <div><strong>Email (if used at login):</strong> <span id="acctEmail">—</span></div>
+    <div><strong>User ID:</strong> <span id="acctId">—</span></div>
+    <div><strong>Role:</strong> <span id="acctRole">—</span></div>
+    <div><strong>Password:</strong> <span title="Passwords are not stored in plain text.">******** (hidden)</span></div>
+    // Optional: link to a future change-password page 
+    // <a href="change-password.html">Change password</a> 
+  </section>
+
+  <hr/>
+
+  <section>
+    <h3>Patient Profile</h3>
+    <div><strong>Date of Birth:</strong> <span id="ppDob">—</span></div>
+    <div><strong>Address:</strong> <span id="ppAddress">—</span></div>
+    <div><strong>Phone:</strong> <span id="ppPhone">—</span></div>
+    <div><strong>Notes:</strong> <span id="ppNotes">—</span></div>
+  </section>
+
+  <hr/>
+
+  <section>
+    <h3>My Appointments</h3>
+    <ul id="apptList"></ul>
+  </section>
+
+  <script src="script/nav.js"></script>
+  <script src="script/myprofile.js"></script>
+</body>
+</html> -->

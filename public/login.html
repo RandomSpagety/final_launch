@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header class="nav"><div class="nav-inner">
+    <a class="brand" href="/index.html"><span class="brand-dot"></span> Dentistry Hub</a>
+  </div></header>
+
+  <main class="container" style="max-width:560px">
+    <div class="card">
+      <h3>Welcome back</h3>
+      <p class="muted">Sign in to your account</p>
+      <form id="loginForm" style="margin-top:14px">
+        <label>Email</label>
+        <input class="input" name="email" type="email" required />
+        <div style="height:10px"></div>
+        <label>Password</label>
+        <input class="input" name="password" type="password" required />
+        <div style="height:10px"></div>
+        <label>Login as</label>
+        <select class="input" name="role">
+          <option value="patient">Patient</option>
+          <option value="doctor">Doctor</option>
+          <option value="admin">Admin</option>
+        </select>
+        <div style="height:14px"></div>
+        <button class="btn" type="submit">Login</button>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const form = new FormData(e.target);
+      const payload = {
+        email: form.get('email'),
+        password: form.get('password'),
+        role: form.get('role')
+      };
+      const res = await fetch('/api/auth/login', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if(res.ok){
+        localStorage.setItem('demoToken', data.token);
+        localStorage.setItem('role', data.user.role);
+        // route by role
+        if(data.user.role==='admin') location.href='/admin.html';
+        else if(data.user.role==='doctor') location.href='/doctor.html';
+        else location.href='/profile.html';
+      }else{
+        alert(data.message || 'Login failed');
+      }
+    });
+  </script>
+  <script src="/script/auth-ui.js"></script>
+  <script>
+document.getElementById('loginForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const form = new FormData(e.target);
+  const payload = {
+    email: form.get('email'),
+    password: form.get('password'),
+    role: form.get('role')
+  };
+  const res = await fetch('/api/auth/login', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(payload)
+  });
+  const data = await res.json();
+  if(res.ok){
+    localStorage.setItem('demoToken', data.token);
+    localStorage.setItem('role', data.user.role);
+    // Always land on My Profile after login
+    location.href='/myprofile.html';
+  }else{
+    alert(data.message || 'Login failed');
+  }
+});
+</script>
+</body>
+</html>

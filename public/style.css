@@ -1,0 +1,98 @@
+/* ====== Modern base reset ====== */
+* { box-sizing: border-box; }
+:root{
+  --bg:#0b1220;       /* dark navy */
+  --card:#101a2e;     /* card background */
+  --muted:#7b8aa1;    /* secondary text */
+  --text:#e7eefc;     /* main text */
+  --brand:#6aa7ff;    /* accents */
+  --brand-2:#52e3c2;  /* accents 2 */
+  --danger:#ff6b6b;
+  --radius:16px;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+}
+html,body{
+  margin:0; padding:0; background:linear-gradient(180deg,#0b1220 0%,#0c1423 100%);
+  color:var(--text); font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+/* ====== Layout ====== */
+.container{ max-width:1100px; margin:0 auto; padding:24px; }
+.grid{ display:grid; gap:18px; }
+.grid-3{ grid-template-columns: repeat(3, minmax(0,1fr)); }
+@media (max-width: 900px){ .grid-3{ grid-template-columns: 1fr; } }
+
+/* ====== Header / Nav ====== */
+.nav{
+  backdrop-filter:saturate(140%) blur(8px);
+  position:sticky; top:0; z-index:20;
+  background:rgba(16,26,46,.75); border-bottom:1px solid rgba(255,255,255,.06);
+}
+.nav-inner{ display:flex; align-items:center; justify-content:space-between; padding:14px 24px; }
+.brand{ display:flex; gap:10px; align-items:center; text-decoration:none; color:var(--text); font-weight:700; letter-spacing:.2px; }
+.brand-dot{ width:10px; height:10px; border-radius:999px; background:linear-gradient(135deg,var(--brand),var(--brand-2)); box-shadow:0 0 18px var(--brand); }
+.nav a{ color:var(--muted); text-decoration:none; margin-left:16px; }
+.nav a:hover{ color:var(--text); }
+
+/* ====== Cards ====== */
+.card{
+  background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:var(--radius);
+  padding:18px;
+  box-shadow:var(--shadow);
+}
+.card h3{ margin:0 0 6px; font-size:18px; }
+.card p{ margin:0; color:var(--muted); }
+
+/* ====== Buttons & Inputs ====== */
+.btn{
+  display:inline-flex; align-items:center; gap:8px;
+  background:linear-gradient(135deg,var(--brand),var(--brand-2));
+  color:#08111f; font-weight:700; border:none; border-radius:12px;
+  padding:10px 14px; cursor:pointer;
+  transition:transform .08s ease, box-shadow .2s ease;
+  box-shadow:0 6px 16px rgba(82,227,194,.25);
+}
+.btn:hover{ transform:translateY(-1px); }
+.btn.secondary{ background:transparent; color:var(--text); border:1px solid rgba(255,255,255,.15); box-shadow:none; }
+.btn.danger{ background:var(--danger); color:#fff; box-shadow:0 6px 16px rgba(255,107,107,.25); }
+
+.input, select{
+  width:100%; background:#0c1628; color:var(--text);
+  border:1px solid rgba(255,255,255,.1); border-radius:12px; padding:10px 12px;
+}
+
+/* ====== Tables ====== */
+.table{
+  width:100%; border-collapse:separate; border-spacing:0 10px;
+}
+.table thead th{
+  text-align:left; font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);
+  padding:0 12px 6px;
+}
+.table tbody tr{
+  background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08);
+}
+.table tbody td{
+  padding:12px; border-top:1px solid rgba(255,255,255,.05);
+}
+.badge{ padding:6px 10px; border-radius:999px; background:rgba(106,167,255,.15); color:var(--brand); font-weight:700; }
+
+/* ====== Footer ====== */
+.footer{ color:var(--muted); text-align:center; padding:24px; border-top:1px solid rgba(255,255,255,.06); margin-top:30px; }
+/* ====== Home hero ====== */
+.hero {
+  position: relative; overflow: hidden; border-radius: var(--radius);
+  border:1px solid rgba(255,255,255,.07); box-shadow: var(--shadow);
+  background:#0c1628;
+}
+.hero img { width:100%; height: 360px; object-fit: cover; display:block; opacity:.9; }
+.hero-title {
+  position:absolute; left:24px; bottom:24px; right:24px;
+  font-size:28px; font-weight:800;
+  text-shadow: 0 4px 24px rgba(0,0,0,.5);
+}
+.about { margin-top:16px; color:var(--muted); }
+.auth-grid { display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:18px; margin-top:18px; }
+@media (max-width:900px){ .auth-grid{ grid-template-columns: 1fr; } }
