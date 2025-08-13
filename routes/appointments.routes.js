@@ -61,9 +61,6 @@ router.post('/', auth(), async (req, res) => {
   }
 });
 
-module.exports = router;
-
-
 // Example DELETE route
 router.delete('/:id/cancel', async (req, res) => {
   try {
@@ -74,3 +71,9 @@ router.delete('/:id/cancel', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+
+
+module.exports = router;
+
+
