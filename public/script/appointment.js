@@ -46,6 +46,9 @@ async function loadDoctors() {
   }
 }
 
+await fetch(`/api/appointments/${appointmentId}/cancel`, {
+  method: 'DELETE',
+});
 async function loadAppointments() {
   try {
     const res = await fetch('/api/appointments', { headers: { Authorization: `Bearer ${token}` } });
@@ -105,8 +108,7 @@ document.querySelector('#list').addEventListener('click', async (e) => {
     loadAppointments();
   } catch (err) { report('delete', err); }
 });
-await fetch(`/api/appointments/${appointmentId}/cancel`, {
-  method: 'DELETE',
-});
 
 loadDoctors().then(loadAppointments);
+
+
