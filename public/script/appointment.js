@@ -105,5 +105,8 @@ document.querySelector('#list').addEventListener('click', async (e) => {
     loadAppointments();
   } catch (err) { report('delete', err); }
 });
+await fetch(`/api/appointments/${appointmentId}/cancel`, {
+  method: 'DELETE',
+});
 
 loadDoctors().then(loadAppointments);

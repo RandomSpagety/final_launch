@@ -62,3 +62,15 @@ router.post('/', auth(), async (req, res) => {
 });
 
 module.exports = router;
+
+
+// Example DELETE route
+router.delete('/:id/cancel', async (req, res) => {
+  try {
+    const appointmentId = req.params.id;
+    // Cancel logic here...
+    res.json({ message: 'Appointment cancelled' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
