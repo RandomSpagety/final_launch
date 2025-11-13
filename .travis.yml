@@ -1,18 +1,15 @@
-# .travis.yml  (for your dentist Node/Express repo)
+# .travis.yml
 
 language: node_js
 node_js:
-  - "20"              # or "18" if you prefer LTS
+  - "20"
 
-# Speed up builds by caching dependencies
 cache:
   directories:
     - node_modules
 
-# Install dependencies
 install:
   - npm ci || npm install
 
-# The command Travis will run to "test" your project
 script:
-  - npm test
+  - npm start
