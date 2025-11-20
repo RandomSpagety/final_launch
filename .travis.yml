@@ -13,3 +13,4 @@ install:
 
 script:
   - echo "Travis config detected"
+  - npm start
